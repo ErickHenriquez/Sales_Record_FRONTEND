@@ -1,24 +1,51 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+
+import Login from './components/auth/Login'
+import Dashboard from './components/Dashboard'
+import User from './components/User'
+import NuevaCuenta from './components/auth/NuevaCuenta'
+import Productos from './components/Productos/Productos'
+
+
 
 function App() {
+  
+  const [usuario, asigaUser] = useState(null);
+
+  const handleUser = (user) => {
+    console.log(user);
+    asigaUser(user);
+  }
+  
+
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Switch>
+
+        <Route exact path="/" component={Login}>
+          <Login handleUser={handleUser}/>
+        </Route>
+
+        <Route exact path="/dashboard">
+          <Dashboard user={usuario} handleUser={handleUser}/>          
+        </Route>
+
+        <Route exact path="/user">
+          <User user={usuario}/>          
+        </Route> 
+
+        <Route exact path="/nuevaCuenta" component={NuevaCuenta}/>
+        
+        <Route exact path="/productos">
+          <Productos user={usuario}/>
+        </Route>
+
+      </Switch>
+    </Router>
+    
   );
 }
 
