@@ -1,8 +1,40 @@
 import React from 'react';
+import axios from 'axios';
 
 const User = (props) => {
 
+    //let history = useHistory();
+    var historial = {}
+
     console.log(props.user)
+
+    // Traer Historial de usuario
+    const urlBase = "http://localhost:8080/api/record/user/"
+    const getHistorial = async () => {
+       try{
+           const response = await axios({
+                   method: 'get',
+                   url: urlBase + props.user.id
+                 });
+           
+           historial = response.data;
+           console.log(historial);
+           console.log(historial[0].movimiento);
+
+           /*usuario.id = response.data.id;
+           usuario.name = response.data.name;
+           usuario.password = null;
+           handleUser(usuario);*/
+           //history.push('/dashboard');
+       }
+       catch (error){
+           alert("El usuario y/o contraseña es incorrecto, intentelo nuevamente.");
+           console.error(error);
+       }
+    }
+
+    getHistorial()
+    
     return ( 
         <div className="container pt-4">
             <div>
@@ -21,8 +53,16 @@ const User = (props) => {
                     </div>
                 </nav>
             </div>
-            <div className="d-flex flex-row bd-highlight mt-3 mb-3">
-                <div className="p-2 bd-highlight"><h1>Hola!</h1></div>
+            <div className="d-block bd-highlight mt-3">
+                    <h1 className="text-start mb-0 p-3">Nombre: {props.user.name}</h1>        
+                    <h1 className="text-start mb-0 p-3">Correo: {props.user.email}</h1>
+            </div>
+            <div className="d-block bd-highlight mt-5 ">
+                <h1 className="text-start mb-0 p-3">Historial:</h1>
+                    {Object.keys(historial).map(key => (
+                        
+                        <p> {historial[key].movimiento} </p>
+                    ))}
             </div>
         </div>
      );
